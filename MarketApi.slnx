@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="../MarketMobileApp/MarketMobileApp.csproj" />
+  <Project Path="MarketApi.csproj" />
+</Solution>

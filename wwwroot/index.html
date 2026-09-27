@@ -1,0 +1,317 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ماركت أونلاين</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background-color: #f7f9fc;
+            color: #333;
+            padding-bottom: 80px;
+        }
+
+        header {
+            background: #ff5722;
+            color: white;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .cart-badge {
+            background: white;
+            color: #ff5722;
+            font-weight: bold;
+            border-radius: 50%;
+            padding: 4px 10px;
+            margin-right: 8px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 15px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s;
+        }
+
+            .card:hover {
+                transform: translateY(-4px);
+            }
+
+            .card img {
+                width: 100%;
+                height: 160px;
+                object-fit: cover;
+            }
+
+        .card-body {
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .card-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .card-price {
+            font-size: 1.15rem;
+            color: #2e7d32;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .btn-add {
+            background: #ff5722;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: auto;
+        }
+
+            .btn-add:hover {
+                background: #e64a19;
+            }
+
+        /* سلة الطلبات */
+        .cart-modal {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: 20px 20px 0 0;
+            box-shadow: 0 -4px 16px rgba(0,0,0,0.15);
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 20px;
+            display: none;
+            z-index: 200;
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            z-index: 150;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            padding: 10px 0;
+        }
+
+        .input-group {
+            margin-top: 12px;
+        }
+
+            .input-group input, .input-group textarea {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                margin-top: 4px;
+            }
+
+        .btn-order {
+            background: #2e7d32;
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h2>🛒 ماركت أونلاين</h2>
+        <div onclick="toggleCart()" style="cursor: pointer; display: flex; align-items: center;">
+            <span class="cart-badge" id="cart-count">0</span>
+            <span>السلة</span>
+        </div>
+    </header>
+
+    <div class="container">
+        <h3 style="margin-bottom: 15px;">المنتجات المتاحة</h3>
+        <div class="products-grid" id="products-list">
+            <p>جاري تحميل المنتجات...</p>
+        </div>
+    </div>
+
+    <!-- نافذة السلة -->
+    <div class="overlay" id="overlay" onclick="toggleCart()"></div>
+    <div class="cart-modal" id="cart-modal">
+        <h3>سلة الطلبات</h3>
+        <div id="cart-items" style="margin-top: 10px;"></div>
+        <div style="margin-top: 15px; font-weight: bold; font-size: 1.2rem;">
+            الإجمالي: <span id="cart-total" style="color: #2e7d32;">0</span> جنيه
+        </div>
+
+        <div class="input-group">
+            <label>الاسم بالكامل:</label>
+            <input type="text" id="cust-name" placeholder="مثال: مصطفى محمد">
+        </div>
+        <div class="input-group">
+            <label>رقم التليفون:</label>
+            <input type="tel" id="cust-phone" placeholder="01xxxxxxxxx">
+        </div>
+        <div class="input-group">
+            <label>العنوان بالتفصيل:</label>
+            <textarea id="cust-address" rows="2" placeholder="المنطقة، اسم الشارع، رقم العمارة والشقة"></textarea>
+        </div>
+
+        <button class="btn-order" onclick="submitOrder()">تأكيد الطلب الآن</button>
+    </div>
+
+    <script>
+        let products = [];
+        let cart = [];
+
+        // 1. جلب المنتجات من الـ API
+        async function fetchProducts() {
+            try {
+                const res = await fetch('/api/Market/products');
+                products = await res.json();
+                renderProducts();
+            } catch (err) {
+                document.getElementById('products-list').innerHTML = '<p>تعذر الاتصال بالسيرفر.</p>';
+            }
+        }
+
+        function renderProducts() {
+            const container = document.getElementById('products-list');
+            container.innerHTML = products.map(p => `
+                <div class="card">
+                    <img src="${p.imageUrl}" alt="${p.name}">
+                    <div class="card-body">
+                        <div class="card-title">${p.name}</div>
+                        <div class="card-price">${p.price} جنيه</div>
+                        <button class="btn-add" onclick="addToCart(${p.id})">إضافة للسلة +</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 2. إدارة السلة
+        function addToCart(id) {
+            const item = products.find(p => p.id === id);
+            cart.push(item);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            document.getElementById('cart-count').innerText = cart.length;
+            const itemsContainer = document.getElementById('cart-items');
+            itemsContainer.innerHTML = cart.map((item, index) => `
+                <div class="cart-item">
+                    <span>${item.name}</span>
+                    <span>${item.price} جنيه <button onclick="removeFromCart(${index})" style="color: red; border: none; background: none; cursor: pointer;">✕</button></span>
+                </div>
+            `).join('');
+
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            document.getElementById('cart-total').innerText = total;
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function toggleCart() {
+            const modal = document.getElementById('cart-modal');
+            const overlay = document.getElementById('overlay');
+            const isOpen = modal.style.display === 'block';
+            modal.style.display = isOpen ? 'none' : 'block';
+            overlay.style.display = isOpen ? 'none' : 'block';
+        }
+
+        // 3. إرسال الأوردر لقاعدة البيانات
+        async function submitOrder() {
+            const name = document.getElementById('cust-name').value.trim();
+            const phone = document.getElementById('cust-phone').value.trim();
+            const address = document.getElementById('cust-address').value.trim();
+
+            if (cart.length === 0) return alert('السلة فارغة!');
+            if (!name || !phone || !address) return alert('برجاء كتابة جميع البيانات (الاسم، الهاتف، العنوان)');
+
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            const itemsSummary = cart.map(i => i.name).join(' ، ');
+
+            const orderData = {
+                customerName: name,
+                phone: phone,
+                address: address,
+                orderItems: itemsSummary,
+                totalPrice: total
+            };
+
+            try {
+                const res = await fetch('/api/Market/order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(orderData)
+                });
+
+                if (res.ok) {
+                    alert('تم استلام طلبك بنجاح وسنقوم بالتجهيز فوراً!');
+                    cart = [];
+                    updateCartUI();
+                    toggleCart();
+                } else {
+                    alert('حدث خطأ أثناء إرسال الطلب.');
+                }
+            } catch {
+                alert('تعذر الوصول للسيرفر.');
+            }
+        }
+
+        fetchProducts();
+    </script>
+</body>
+</html>
