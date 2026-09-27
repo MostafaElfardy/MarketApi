@@ -9,6 +9,8 @@ builder.Services.AddDbContext<MarketDbContext>(options =>
 
 builder.Services.AddControllers();
 
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 var app = builder.Build();
 
 // إنشاء قاعدة البيانات والجداول تلقائياً إذا لم تكن موجودة
