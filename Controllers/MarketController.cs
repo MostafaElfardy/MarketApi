@@ -42,7 +42,7 @@ public class MarketController : ControllerBase
     {
         if (order == null) return BadRequest();
 
-        order.CreatedAt = DateTime.UtcNow;
+
         order.Status = "تم استلام الطلب";
 
         _context.Orders.Add(order);
