@@ -1,74 +1,85 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MarketApi.Data;
 using MarketApi.Models;
 
-namespace MarketApi.Controllers
+namespace MarketApi.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class MarketController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class MarketController : ControllerBase
+    private readonly MarketDbContext _context;
+
+    public MarketController(MarketDbContext context)
     {
-        private readonly MarketDbContext _context;
+        _context = context;
+    }
 
-        public MarketController(MarketDbContext context)
-        {
-            _context = context;
-        }
+    // 1. جلب المنتجات
+    [HttpGet("products")]
+    public async Task<IActionResult> GetProducts()
+    {
+        var products = await _context.Products.ToListAsync();
+        return Ok(products);
+    }
 
-        // 1. جلب جميع المنتجات
-        [HttpGet("products")]
-        public async Task<IActionResult> GetProducts()
-        {
-            var products = await _context.Products.ToListAsync();
-            return Ok(products);
-        }
+    // 2. استقبال وحفظ طلب جديد
+    [HttpPost("order")]
+    public async Task<IActionResult> CreateOrder([FromBody] Order order)
+    {
+        if (order == null) return BadRequest();
 
-        // 2. تبديل حالة توفر المنتج (متاح / غير متوفر)
-        [HttpPost("product/{id}/toggle-availability")]
-        public async Task<IActionResult> ToggleAvailability(int id)
-        {
-            var product = await _context.Products.FindAsync(id);
-            if (product == null) return NotFound();
+        order.CreatedAt = DateTime.UtcNow;
+        order.Status = "قيد التجهيز";
 
-            product.IsAvailable = !product.IsAvailable;
-            await _context.SaveChangesAsync();
-            return Ok(product);
-        }
+        _context.Orders.Add(order);
+        await _context.SaveChangesAsync();
 
-        // 3. إضافة طلب جديد
-        [HttpPost("order")]
-        public async Task<IActionResult> CreateOrder([FromBody] Order order)
-        {
-            if (order == null) return BadRequest();
+        return Ok(new { message = "Order received successfully", orderId = order.Id });
+    }
 
-            order.OrderDate = DateTime.Now;
-            order.Status = "طلب جديد";
+    // 3. جلب جميع الطلبات للوحة التحكم
+    [HttpGet("orders")]
+    public async Task<IActionResult> GetOrders()
+    {
+        var orders = await _context.Orders.OrderByDescending(o => o.Id).ToListAsync();
+        return Ok(orders);
+    }
 
-            _context.Orders.Add(order);
-            await _context.SaveChangesAsync();
+    // 4. جلب طلب محدد بواسطة الـ ID لصفحة متابعة الطلب
+    [HttpGet("order/{id}")]
+    public async Task<IActionResult> GetOrderById(int id)
+    {
+        var order = await _context.Orders.FindAsync(id);
+        if (order == null) return NotFound(new { message = "Order not found" });
 
-            return Ok(new { message = "تم حفظ الطلب بنجاح", orderId = order.Id });
-        }
+        return Ok(order);
+    }
 
-        // 4. جلب جميع الطلبات
-        [HttpGet("orders")]
-        public async Task<IActionResult> GetOrders()
-        {
-            var orders = await _context.Orders.OrderByDescending(o => o.Id).ToListAsync();
-            return Ok(orders);
-        }
+    // 5. تحديث حالة الطلب
+    [HttpPut("order/{id}/status")]
+    public async Task<IActionResult> UpdateOrderStatus(int id, [FromBody] string status)
+    {
+        var order = await _context.Orders.FindAsync(id);
+        if (order == null) return NotFound();
 
-        // 5. تحديث حالة الطلب
-        [HttpPut("order/{id}/status")]
-        public async Task<IActionResult> UpdateStatus(int id, [FromBody] string status)
-        {
-            var order = await _context.Orders.FindAsync(id);
-            if (order == null) return NotFound();
+        order.Status = status;
+        await _context.SaveChangesAsync();
 
-            order.Status = status;
-            await _context.SaveChangesAsync();
+        return Ok(order);
+    }
 
-            return Ok(order);
-        }
+    // 6. تغيير حالة توفر المنتج
+    [HttpPut("product/{id}/toggle-availability")]
+    public async Task<IActionResult> ToggleProductAvailability(int id)
+    {
+        var product = await _context.Products.FindAsync(id);
+        if (product == null) return NotFound();
+
+        product.IsAvailable = !product.IsAvailable;
+        await _context.SaveChangesAsync();
+
+        return Ok(product);
     }
 }
