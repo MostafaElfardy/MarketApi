@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MarketApi.Data;
+using MarketApi.Models;
 using MarketApi.Models;
 
 namespace MarketApi.Controllers;
