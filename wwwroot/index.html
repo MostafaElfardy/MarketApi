@@ -4,18 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>حمزة المنوفي</title>
-    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="icon" type="image/png" href="splash_logo.png">
     <style>
         :root {
+            --brand-green: #0d5c34;
+            --brand-dark-green: #093f24;
+            --search-btn-green: #8cb657;
+            --light-green-badge: #e9f3e7;
             --primary-orange: #D85B28;
-            --primary-green: #1b4d2e;
-            --light-green: #e8f5e9;
             --bg-color: #f8fafc;
             --card-bg: #ffffff;
             --text-main: #1e293b;
             --text-muted: #64748b;
             --border-color: #e2e8f0;
-            --danger: #ef4444;
         }
 
         * {
@@ -29,14 +30,73 @@
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
-            padding-bottom: 90px;
+            padding-bottom: 95px;
+            overflow-x: hidden;
+        }
+
+        /* شاشة البداية الافتتاحية بلون خلفية أبيض ناصع */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.6s ease-out, visibility 0.6s;
+        }
+
+        .splash-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: fadeInScale 0.8s ease-out;
+        }
+
+        .splash-logo-img {
+            width: 80vw;
+            max-width: 280px;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .spinner {
+            margin-top: 30px;
+            width: 32px;
+            height: 32px;
+            border: 3.5px solid #e2e8f0;
+            border-top-color: var(--brand-green);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.92);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         /* الهيدر العلوي */
         .top-navbar {
             background-color: #ffffff;
             padding: 12px 16px 10px 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
             position: sticky;
             top: 0;
             z-index: 100;
@@ -68,7 +128,7 @@
         .brand-name {
             font-size: 1.25rem;
             font-weight: 800;
-            color: var(--primary-green);
+            color: var(--brand-dark-green);
         }
 
         .actions-left {
@@ -82,38 +142,20 @@
             background: none;
             border: none;
             cursor: pointer;
-            display: flex;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            color: var(--primary-green);
-            font-size: 1.35rem;
+            padding: 4px;
         }
 
-        .cart-badge {
-            position: absolute;
-            top: -6px;
-            right: -8px;
-            background-color: #d1e7dd;
-            color: #0f5132;
-            font-size: 0.72rem;
-            font-weight: bold;
-            width: 19px;
-            height: 19px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid #badbcc;
-        }
-
-        .search-container {
+        /* شريط البحث النظيف بدون باركود */
+        .search-wrapper {
             display: flex;
             align-items: center;
             background-color: #ffffff;
             border: 1.5px solid #d1d5db;
-            border-radius: 30px;
-            overflow: hidden;
-            padding: 3px 6px 3px 14px;
+            border-radius: 35px;
+            padding: 4px 6px 4px 14px;
         }
 
         .search-input {
@@ -124,25 +166,29 @@
             background: transparent;
             color: var(--text-main);
             text-align: right;
+            padding-right: 8px;
         }
 
-        .search-btn {
-            background-color: var(--primary-orange);
-            color: white;
+        .search-btn-rounded {
+            background-color: var(--search-btn-green);
             border: none;
-            border-radius: 24px;
-            width: 36px;
-            height: 36px;
+            border-radius: 20px;
+            width: 46px;
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.1rem;
             cursor: pointer;
+            transition: opacity 0.2s;
         }
 
-        /* شبكة المنتجات وتصميم الكروت */
+            .search-btn-rounded:active {
+                opacity: 0.85;
+            }
+
+        /* شبكة المنتجات */
         .container {
-            padding: 16px;
+            padding: 14px;
             max-width: 650px;
             margin: 0 auto;
         }
@@ -179,6 +225,20 @@
             cursor: pointer;
             font-size: 1rem;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            z-index: 2;
+        }
+
+        .discount-tag {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background-color: var(--primary-orange);
+            color: white;
+            font-size: 0.72rem;
+            font-weight: 800;
+            padding: 2px 8px;
+            border-radius: 12px;
+            z-index: 2;
         }
 
         .product-img {
@@ -202,15 +262,27 @@
             margin-bottom: 6px;
         }
 
-        .product-price {
-            font-size: 1rem;
-            color: var(--primary-green);
-            font-weight: 800;
+        .price-container {
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
             margin-bottom: 8px;
         }
 
+        .product-price {
+            font-size: 1rem;
+            color: var(--brand-green);
+            font-weight: 800;
+        }
+
+        .old-price {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            text-decoration: line-through;
+        }
+
         .add-btn {
-            background-color: var(--primary-green);
+            background-color: var(--brand-green);
             color: white;
             border: none;
             padding: 8px 10px;
@@ -221,7 +293,7 @@
             width: 100%;
         }
 
-        /* تصميم الكبسولة السفلية للتنقل (Modern Capsule Bar) */
+        /* شريط الكبسولة السفلي */
         .bottom-nav-wrapper {
             position: fixed;
             bottom: 12px;
@@ -230,21 +302,20 @@
             display: flex;
             justify-content: center;
             z-index: 150;
-            padding: 0 16px;
+            padding: 0 12px;
         }
 
         .bottom-capsule-nav {
             background-color: #ffffff;
             border-radius: 40px;
-            padding: 6px 12px;
+            padding: 6px 8px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 6px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+            box-shadow: 0 4px 22px rgba(0,0,0,0.12);
             border: 1px solid #eef2f6;
             width: 100%;
-            max-width: 480px;
+            max-width: 500px;
         }
 
         .nav-item-btn {
@@ -256,18 +327,18 @@
             align-items: center;
             justify-content: center;
             gap: 6px;
-            padding: 8px 14px;
+            padding: 8px 12px;
             border-radius: 30px;
             transition: all 0.25s ease-in-out;
-            color: var(--primary-green);
+            color: var(--brand-green);
             font-weight: bold;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
+            flex-shrink: 0;
         }
 
-            .nav-item-btn .nav-icon {
-                font-size: 1.3rem;
-                display: inline-flex;
-                align-items: center;
+            .nav-item-btn svg {
+                stroke: var(--brand-green);
+                fill: none;
             }
 
             .nav-item-btn .nav-text {
@@ -275,18 +346,20 @@
                 white-space: nowrap;
             }
 
-            /* الحالة المفعلة (كبسولة خضراء كاملة بنفس شكل التصميم) */
             .nav-item-btn.active {
-                background-color: var(--primary-green);
+                background-color: var(--brand-green);
                 color: #ffffff;
-                padding: 8px 18px;
+                padding: 8px 16px;
             }
+
+                .nav-item-btn.active svg {
+                    stroke: #ffffff;
+                }
 
                 .nav-item-btn.active .nav-text {
                     display: inline-block;
                 }
 
-        /* الشاشات الأخرى */
         .page-view {
             display: none;
         }
@@ -307,14 +380,14 @@
             background: white;
             border-radius: 12px;
             border: 1px solid var(--border-color);
-            padding: 16px;
+            padding: 14px 16px;
             display: flex;
             align-items: center;
             gap: 12px;
             cursor: pointer;
             margin-bottom: 10px;
             font-weight: bold;
-            font-size: 1.05rem;
+            border-right: 4px solid var(--brand-green);
         }
 
         .setting-item {
@@ -328,7 +401,7 @@
         }
 
         .btn-main {
-            background-color: var(--primary-green);
+            background-color: var(--brand-green);
             color: white;
             border: none;
             padding: 12px;
@@ -342,37 +415,61 @@
 </head>
 <body>
 
-    <!-- الجزء العلوي المخصص -->
+    <!-- شاشة البداية الافتتاحية بخلفية بيضاء نقية -->
+    <div id="splash-screen">
+        <div class="splash-content">
+            <img src="splash_logo.png" alt="حمزة المنوفي" class="splash-logo-img" onerror="this.src='logo.png'">
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <!-- الهيدر العلوي مع شريط البحث البسيط -->
     <div class="top-navbar">
         <div class="header-row">
             <!-- أقصى اليمين: اللوجو والاسم -->
             <div class="brand-right" onclick="switchNav('home')">
-                <img src="logo.png" alt="لوجو" class="brand-logo" onerror="this.src='https://via.placeholder.com/44'">
+                <img src="logo.png" alt="حمزة المنوفي" class="brand-logo" onerror="this.src='splash_logo.png'">
                 <span class="brand-name">حمزة المنوفي</span>
             </div>
 
-            <!-- أقصى اليسار: التواصل والسلة -->
+            <!-- أقصى اليسار: زر الدعم وزر السلة -->
             <div class="actions-left">
+                <!-- زر رسالة الدعم -->
                 <button class="action-icon-btn" onclick="openSupport()" title="تواصل معنا">
-                    💬
+                    <svg width="30" height="30" viewBox="0 0 28 28" fill="none">
+                        <path d="M7 4H21C23.2 4 25 5.8 25 8V18C25 20.2 23.2 22 21 22H10L5 26V8C5 5.8 6.8 4 7 4Z"
+                              stroke="#0d5c34" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" />
+                        <line x1="9.5" y1="11" x2="18.5" y2="11" stroke="#0d5c34" stroke-width="2.3" stroke-linecap="round" />
+                        <line x1="9.5" y1="16" x2="16.5" y2="16" stroke="#0d5c34" stroke-width="2.3" stroke-linecap="round" />
+                    </svg>
                 </button>
+
+                <!-- زر السلة المخصص -->
                 <button class="action-icon-btn" onclick="switchNav('cart')" title="السلة">
-                    🛒
-                    <span id="cart-badge-count" class="cart-badge">0</span>
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0d5c34" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span id="cart-badge-count" style="position: absolute; top: -2px; right: -4px; background-color: var(--light-green-badge); color: #1e293b; font-size: 0.82rem; font-weight: 700; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 2px rgba(0,0,0,0.06);">0</span>
                 </button>
             </div>
         </div>
 
-        <!-- شريط البحث بزر برتقالي -->
-        <div class="search-container">
-            <input type="text" id="search-input" class="search-input" placeholder="ابحث عن بيض، جبن، ألبان..." oninput="onSearch(this.value)">
-            <button class="search-btn" onclick="onSearch(document.getElementById('search-input').value)">
-                🔍
+        <!-- شريط البحث النظيف والمباشر بدون باركود وبدون نص التوصيل -->
+        <div class="search-wrapper">
+            <button class="search-btn-rounded" onclick="onSearch(document.getElementById('search-input').value)">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
             </button>
+            <input type="text" id="search-input" class="search-input" placeholder="ابحث عن مياه، بيض، ألبان..." oninput="onSearch(this.value)">
         </div>
     </div>
 
-    <!-- 1. شاشة الرئيسية (Home) -->
+    <!-- شاشات العرض -->
+    <!-- 1. الرئيسية -->
     <div id="view-home" class="page-view active">
         <div class="container">
             <div id="products-list" class="products-grid">
@@ -383,30 +480,41 @@
         </div>
     </div>
 
-    <!-- 2. شاشة الأقسام (Categories) -->
+    <!-- 2. الأقسام -->
     <div id="view-categories" class="page-view">
         <div class="container">
-            <h2 style="margin-bottom: 14px; font-size: 1.2rem;">📂 تصفح أقسام الماركت</h2>
+            <h2 style="margin-bottom: 14px; font-size: 1.2rem;">🧺 تصفح أقسام الماركت</h2>
             <div class="category-card" onclick="filterByCategory('ألبان')">
-                <span style="font-size: 1.8rem;">🥛</span>
+                <span style="font-size: 1.6rem;">🥛</span>
                 <span>منتجات الألبان والأجبان الطازجة</span>
             </div>
             <div class="category-card" onclick="filterByCategory('زيوت')">
-                <span style="font-size: 1.8rem;">🌻</span>
-                <span>الزيوت والسمن الطبيعي</span>
+                <span style="font-size: 1.6rem;">🌻</span>
+                <span>الزيوت والسمن البلدي</span>
             </div>
             <div class="category-card" onclick="filterByCategory('بقوليات')">
-                <span style="font-size: 1.8rem;">🌾</span>
+                <span style="font-size: 1.6rem;">🌾</span>
                 <span>البقوليات والأرز والمكرونة</span>
             </div>
             <div class="category-card" onclick="filterByCategory('الكل')">
-                <span style="font-size: 1.8rem;">🌐</span>
+                <span style="font-size: 1.6rem;">🌐</span>
                 <span>جميع منتجات المحل</span>
             </div>
         </div>
     </div>
 
-    <!-- 3. شاشة المفضلة (Favorites) -->
+    <!-- 3. العروض -->
+    <div id="view-offers" class="page-view">
+        <div class="container">
+            <div style="background: linear-gradient(135deg, #d85b28, #f97316); color: white; border-radius: 12px; padding: 14px; margin-bottom: 16px; text-align: center;">
+                <h3 style="font-size: 1.15rem; margin-bottom: 4px;">🎉 أقوى عروض وتخفيضات اليوم</h3>
+                <p style="font-size: 0.85rem; opacity: 0.95;">وفر أكثر مع عروض مزارع وألبان حمزة المنوفي</p>
+            </div>
+            <div id="offers-list" class="products-grid"></div>
+        </div>
+    </div>
+
+    <!-- 4. المفضلة -->
     <div id="view-favorites" class="page-view">
         <div class="container">
             <h2 style="margin-bottom: 14px; font-size: 1.2rem;">🤍 قائمتي المفضلة</h2>
@@ -414,16 +522,14 @@
         </div>
     </div>
 
-    <!-- 4. شاشة المزيد (More / Settings & Accounts) -->
+    <!-- 5. المزيد -->
     <div id="view-more" class="page-view">
         <div class="container">
-            <!-- بنر إنشاء حساب / تسجيل دخول مماثل للشاشة المرفقة -->
             <div class="card-box" style="text-align: center; padding: 24px 16px;">
-                <div style="font-size: 3rem; margin-bottom: 8px;">📱</div>
+                <div style="font-size: 2.8rem; margin-bottom: 8px;">📱</div>
                 <h3 style="font-size: 1.15rem; margin-bottom: 6px;">ليس لديك حساب؟</h3>
-                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px;">سجل حسابك لتتبع طلباتك والحصول على عروض حصرية</p>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px;">سجل حسابك لتتبع مشترياتك والحصول على خصومات حصرية</p>
                 <button class="btn-main" onclick="openAccountModal()">إنشاء حساب</button>
-                <p style="margin-top: 14px; font-size: 0.9rem; color: var(--text-muted);">لديك حساب؟ <a href="javascript:void(0)" onclick="openAccountModal()" style="color: var(--primary-green); font-weight: bold; text-decoration: none;">تسجيل الدخول</a></p>
             </div>
 
             <div class="card-box">
@@ -434,7 +540,7 @@
                 </div>
                 <div class="setting-item" onclick="openAdminPrompt()">
                     <span>🛡️ لوحة تحكم الإدارة</span>
-                    <span style="color: var(--primary-green);">دخول 🔒</span>
+                    <span style="color: var(--brand-green);">دخول 🔒</span>
                 </div>
                 <div class="setting-item" onclick="openSupport()">
                     <span>📞 تواصل مع الدعم الفني</span>
@@ -444,12 +550,12 @@
         </div>
     </div>
 
-    <!-- شاشة السلة (عند الضغط على أيقونة السلة) -->
+    <!-- السلة -->
     <div id="view-cart" class="page-view">
         <div class="container">
             <h2 style="margin-bottom: 14px; font-size: 1.2rem;">🛒 سلة المشتريات</h2>
             <div id="cart-items" class="card-box">
-                <p style="text-align: center; color: var(--text-muted);">السلة فارغة</p>
+                <p style="text-align: center; color: var(--text-muted);">السلة فارغة حالياً</p>
             </div>
             <div class="card-box">
                 <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
@@ -461,7 +567,7 @@
                     <span>20.0 ج.م</span>
                 </div>
                 <hr style="border: none; border-top: 1px solid var(--border-color); margin: 8px 0;">
-                <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.15rem; color: var(--primary-green);">
+                <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.15rem; color: var(--brand-green);">
                     <span>الإجمالي:</span>
                     <span id="total-val">0.0 ج.م</span>
                 </div>
@@ -476,30 +582,54 @@
         </div>
     </div>
 
-    <!-- شريط الأزرار الكبسولة السفلي (نفس الصور المطلوبة) -->
+    <!-- كبسولة الأزرار السفلية الخمسة -->
     <div class="bottom-nav-wrapper">
         <nav class="bottom-capsule-nav">
             <!-- 1. الرئيسية -->
             <button class="nav-item-btn active" id="btn-home" onclick="switchNav('home')">
-                <span class="nav-icon">🏠</span>
+                <svg width="22" height="22" viewBox="0 0 24 24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
                 <span class="nav-text">الرئيسية</span>
             </button>
 
             <!-- 2. الأقسام -->
             <button class="nav-item-btn" id="btn-categories" onclick="switchNav('categories')">
-                <span class="nav-icon">🧺</span>
+                <svg width="22" height="22" viewBox="0 0 24 24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
                 <span class="nav-text">الأقسام</span>
             </button>
 
-            <!-- 3. المفضلة -->
+            <!-- 3. العروض -->
+            <button class="nav-item-btn" id="btn-offers" onclick="switchNav('offers')">
+                <svg width="22" height="22" viewBox="0 0 24 24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="15" y1="9" x2="9" y2="15"></line>
+                    <circle cx="9.5" cy="9.5" r="1" fill="#0d5c34"></circle>
+                    <circle cx="14.5" cy="14.5" r="1" fill="#0d5c34"></circle>
+                </svg>
+                <span class="nav-text">العروض</span>
+            </button>
+
+            <!-- 4. المفضلة -->
             <button class="nav-item-btn" id="btn-favorites" onclick="switchNav('favorites')">
-                <span class="nav-icon">🤍</span>
+                <svg width="22" height="22" viewBox="0 0 24 24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
                 <span class="nav-text">المفضلة</span>
             </button>
 
-            <!-- 4. المزيد -->
+            <!-- 5. المزيد -->
             <button class="nav-item-btn" id="btn-more" onclick="switchNav('more')">
-                <span class="nav-icon">☰</span>
+                <svg width="22" height="22" viewBox="0 0 24 24" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="4" y1="7" x2="20" y2="7"></line>
+                    <line x1="7" y1="12" x2="17" y2="12"></line>
+                    <line x1="10" y1="17" x2="14" y2="17"></line>
+                </svg>
                 <span class="nav-text">المزيد</span>
             </button>
         </nav>
@@ -514,6 +644,14 @@
 
         window.onload = () => {
             loadProducts();
+            // إخفاء الـ Splash Screen بعد ثانيتين بسلاسة
+            setTimeout(() => {
+                const splash = document.getElementById('splash-screen');
+                if (splash) {
+                    splash.style.opacity = '0';
+                    setTimeout(() => splash.style.display = 'none', 600);
+                }
+            }, 2000);
         };
 
         async function loadProducts() {
@@ -523,11 +661,11 @@
                 renderProducts(allProducts, 'products-list');
             } catch (err) {
                 document.getElementById('products-list').innerHTML = `
-                        <div style="grid-column: span 2; text-align: center; color: var(--danger); padding: 20px;">تعذر الاتصال بالسيرفر.</div>`;
+                    <div style="grid-column: span 2; text-align: center; color: var(--danger); padding: 20px;">تعذر الاتصال بالسيرفر.</div>`;
             }
         }
 
-        function renderProducts(items, targetElementId) {
+        function renderProducts(items, targetElementId, isOffer = false) {
             const list = document.getElementById(targetElementId);
             if (!items || items.length === 0) {
                 list.innerHTML = `<div style="grid-column: span 2; text-align: center; padding: 20px; color: var(--text-muted);">لا توجد عناصر لعرضها</div>`;
@@ -535,16 +673,24 @@
             }
             list.innerHTML = items.map(p => {
                 const isFav = favorites.includes(p.id);
+                const hasDiscount = isOffer || (p.id % 2 === 1);
+                const discountPercent = hasDiscount ? 15 : 0;
+                const oldPrice = hasDiscount ? (p.price * 1.2).toFixed(2) : null;
+
                 return `
-                    <div class="product-card">
-                        <button class="fav-btn" onclick="toggleFav(${p.id})">${isFav ? '❤️' : '🤍'}</button>
-                        <img src="${p.imageUrl || 'https://via.placeholder.com/150'}" alt="${p.name}" class="product-img">
-                        <div class="product-info">
-                            <div class="product-name">${p.name}</div>
-                            <div class="product-price">${p.price.toFixed(2)} ج.م</div>
-                            <button class="add-btn" onclick="addToCart(${p.id})">أضف للسلة 🛒</button>
+                <div class="product-card">
+                    <button class="fav-btn" onclick="toggleFav(${p.id})">${isFav ? '❤️' : '🤍'}</button>
+                    ${hasDiscount ? `<div class="discount-tag">خصم ${discountPercent}%</div>` : ''}
+                    <img src="${p.imageUrl || 'https://via.placeholder.com/150'}" alt="${p.name}" class="product-img">
+                    <div class="product-info">
+                        <div class="product-name">${p.name}</div>
+                        <div class="price-container">
+                            <span class="product-price">${p.price.toFixed(2)} ج.م</span>
+                            ${oldPrice ? `<span class="old-price">${oldPrice} ج.م</span>` : ''}
                         </div>
-                    </div>`;
+                        <button class="add-btn" onclick="addToCart(${p.id})">أضف للسلة 🛒</button>
+                    </div>
+                </div>`;
             }).join('');
         }
 
@@ -562,6 +708,11 @@
         function renderFavorites() {
             const favItems = allProducts.filter(p => favorites.includes(p.id));
             renderProducts(favItems, 'favorites-list');
+        }
+
+        function renderOffers() {
+            const offerItems = allProducts.filter((p, index) => index % 2 === 0);
+            renderProducts(offerItems, 'offers-list', true);
         }
 
         function filterByCategory(cat) {
@@ -594,6 +745,7 @@
             const targetBtn = document.getElementById(`btn-${page}`);
             if (targetBtn) targetBtn.classList.add('active');
 
+            if (page === 'offers') renderOffers();
             if (page === 'favorites') renderFavorites();
             if (page === 'cart') updateCart();
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -626,10 +778,10 @@
             container.innerHTML = cart.map(i => {
                 subtotal += i.product.price * i.quantity;
                 return `
-                    <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border-color);">
-                        <span>${i.product.name} (x${i.quantity})</span>
-                        <span>${(i.product.price * i.quantity).toFixed(2)} ج.م</span>
-                    </div>`;
+                <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border-color);">
+                    <span>${i.product.name} (x${i.quantity})</span>
+                    <span>${(i.product.price * i.quantity).toFixed(2)} ج.م</span>
+                </div>`;
             }).join('');
             document.getElementById('subtotal-val').innerText = `${subtotal.toFixed(2)} ج.م`;
             document.getElementById('total-val').innerText = `${(subtotal + deliveryFee).toFixed(2)} ج.م`;
@@ -666,11 +818,11 @@
         }
 
         function openSupport() {
-            window.open('https://wa.me/201000000000?text=' + encodeURIComponent('السلام عليكم، أود الاستفسار من ماركت حمزة المنوفي'), '_blank');
+            window.open('https://wa.me/201000000000?text=' + encodeURIComponent('السلام عليكم، أود الاستفسار من خدمة عملاء ماركت حمزة المنوفي'), '_blank');
         }
 
         function openAccountModal() {
-            alert('سيتم فتح شاشة إنشاء الحساب قريباً');
+            alert('شاشة إنشاء الحساب ستكون مفعلة في التحديث القادم');
         }
 
         function changeLanguage() {
@@ -680,7 +832,7 @@
         function openAdminPrompt() {
             const pass = prompt('أدخل الرمز السري للإدارة:');
             if (pass === '1234') {
-                alert('مرحباً بك في لوحة تحكم ماركت حمزة المنوفي');
+                alert('مرحباً بك في لوحة تحكم إدارة ماركت حمزة المنوفي');
             } else if (pass !== null) {
                 alert('الرمز السري غير صحيح');
             }
