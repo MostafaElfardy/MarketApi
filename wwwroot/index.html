@@ -9,9 +9,9 @@
         :root {
             --brand-green: #0d5c34;
             --brand-dark-green: #093f24;
-            --search-btn-green: #8cb657;
-            --light-green-badge: #e9f3e7;
             --primary-orange: #D85B28;
+            --primary-orange-light: #fbeee8;
+            --light-green-badge: #e9f3e7;
             --bg-color: #f8fafc;
             --card-bg: #ffffff;
             --text-main: #1e293b;
@@ -34,7 +34,7 @@
             overflow-x: hidden;
         }
 
-        /* شاشة البداية الافتتاحية بلون خلفية أبيض ناصع */
+        /* شاشة البداية الافتتاحية */
         #splash-screen {
             position: fixed;
             top: 0;
@@ -69,7 +69,7 @@
             width: 32px;
             height: 32px;
             border: 3.5px solid #e2e8f0;
-            border-top-color: var(--brand-green);
+            border-top-color: var(--primary-orange);
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
         }
@@ -148,7 +148,7 @@
             padding: 4px;
         }
 
-        /* شريط البحث النظيف بدون باركود */
+        /* شريط البحث مع زر البحث باللون البرتقالي */
         .search-wrapper {
             display: flex;
             align-items: center;
@@ -170,7 +170,7 @@
         }
 
         .search-btn-rounded {
-            background-color: var(--search-btn-green);
+            background-color: var(--primary-orange);
             border: none;
             border-radius: 20px;
             width: 46px;
@@ -186,7 +186,7 @@
                 opacity: 0.85;
             }
 
-        /* شبكة المنتجات */
+        /* شبكة المنتجات وتصميم الكارت المودرن */
         .container {
             padding: 14px;
             max-width: 650px;
@@ -201,40 +201,46 @@
 
         .product-card {
             background-color: var(--card-bg);
-            border-radius: 14px;
+            border-radius: 16px;
             border: 1px solid var(--border-color);
             overflow: hidden;
             display: flex;
             flex-direction: column;
             position: relative;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+            padding: 10px;
         }
 
-        .fav-btn {
+        /* زر المفضلة (القلب) */
+        .fav-heart-btn {
             position: absolute;
-            top: 8px;
-            left: 8px;
-            background: white;
-            border-radius: 50%;
-            width: 32px;
-            height: 32px;
+            top: 10px;
+            left: 10px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 1px solid var(--border-color);
-            cursor: pointer;
-            font-size: 1rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            z-index: 2;
+            z-index: 3;
         }
+
+            .fav-heart-btn svg {
+                transition: transform 0.2s ease, fill 0.2s ease, stroke 0.2s ease;
+            }
+
+            .fav-heart-btn:active svg {
+                transform: scale(1.25);
+            }
 
         .discount-tag {
             position: absolute;
-            top: 8px;
-            right: 8px;
-            background-color: var(--primary-orange);
+            top: 10px;
+            right: 10px;
+            background-color: #8cb657;
             color: white;
-            font-size: 0.72rem;
+            font-size: 0.75rem;
             font-weight: 800;
             padding: 2px 8px;
             border-radius: 12px;
@@ -243,57 +249,117 @@
 
         .product-img {
             width: 100%;
-            height: 135px;
-            object-fit: cover;
-            background-color: #f1f5f9;
+            height: 145px;
+            object-fit: contain;
+            margin: 4px 0 2px 0;
+        }
+
+        /* قسم زر الإضافة والتحكم بالكمية تحت الصورة */
+        .cart-action-row {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            height: 44px;
+            margin-top: -12px;
+            margin-bottom: 6px;
+            z-index: 2;
+        }
+
+        /* زر + المنفرد باللون البرتقالي */
+        .single-add-btn {
+            background-color: var(--primary-orange);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.4rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 3px 8px rgba(216, 91, 40, 0.35);
+            transition: transform 0.15s ease;
+        }
+
+            .single-add-btn:active {
+                transform: scale(0.92);
+            }
+
+        /* شريط التحكم الكبسولي (+ / - / عدد) */
+        .stepper-capsule {
+            display: flex;
+            align-items: center;
+            background-color: var(--primary-orange-light);
+            border-radius: 25px;
+            padding: 2px 4px;
+            gap: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+        }
+
+        .stepper-btn {
+            background-color: var(--primary-orange);
+            color: white;
+            border: none;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            font-size: 1.25rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+            .stepper-btn.minus {
+                background-color: transparent;
+                color: var(--primary-orange);
+                font-size: 1.4rem;
+            }
+
+        .stepper-count {
+            font-weight: 800;
+            font-size: 1rem;
+            color: var(--text-main);
+            min-width: 18px;
+            text-align: center;
         }
 
         .product-info {
-            padding: 10px;
             display: flex;
             flex-direction: column;
-            flex-grow: 1;
-            justify-content: space-between;
-        }
-
-        .product-name {
-            font-size: 0.95rem;
-            font-weight: 700;
-            margin-bottom: 6px;
+            padding: 2px 4px 4px 4px;
         }
 
         .price-container {
             display: flex;
             align-items: baseline;
-            gap: 6px;
-            margin-bottom: 8px;
+            gap: 8px;
+            margin-bottom: 4px;
         }
 
         .product-price {
-            font-size: 1rem;
-            color: var(--brand-green);
+            font-size: 1.05rem;
+            color: #1e293b;
             font-weight: 800;
         }
 
         .old-price {
-            font-size: 0.82rem;
+            font-size: 0.85rem;
             color: var(--text-muted);
             text-decoration: line-through;
         }
 
-        .add-btn {
-            background-color: var(--brand-green);
-            color: white;
-            border: none;
-            padding: 8px 10px;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            width: 100%;
+        .product-name {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--brand-dark-green);
+            line-height: 1.35;
         }
 
-        /* شريط الكبسولة السفلي */
+        /* كبسولة الأزرار السفلية */
         .bottom-nav-wrapper {
             position: fixed;
             bottom: 12px;
@@ -401,7 +467,7 @@
         }
 
         .btn-main {
-            background-color: var(--brand-green);
+            background-color: var(--primary-orange);
             color: white;
             border: none;
             padding: 12px;
@@ -415,7 +481,7 @@
 </head>
 <body>
 
-    <!-- شاشة البداية الافتتاحية بخلفية بيضاء نقية -->
+    <!-- شاشة البداية الافتتاحية -->
     <div id="splash-screen">
         <div class="splash-content">
             <img src="splash_logo.png" alt="حمزة المنوفي" class="splash-logo-img" onerror="this.src='logo.png'">
@@ -423,16 +489,14 @@
         </div>
     </div>
 
-    <!-- الهيدر العلوي مع شريط البحث البسيط -->
+    <!-- الهيدر العلوي -->
     <div class="top-navbar">
         <div class="header-row">
-            <!-- أقصى اليمين: اللوجو والاسم -->
             <div class="brand-right" onclick="switchNav('home')">
                 <img src="logo.png" alt="حمزة المنوفي" class="brand-logo" onerror="this.src='splash_logo.png'">
                 <span class="brand-name">حمزة المنوفي</span>
             </div>
 
-            <!-- أقصى اليسار: زر الدعم وزر السلة -->
             <div class="actions-left">
                 <!-- زر رسالة الدعم -->
                 <button class="action-icon-btn" onclick="openSupport()" title="تواصل معنا">
@@ -456,7 +520,7 @@
             </div>
         </div>
 
-        <!-- شريط البحث النظيف والمباشر بدون باركود وبدون نص التوصيل -->
+        <!-- شريط البحث بزر برتقالي #D85B28 -->
         <div class="search-wrapper">
             <button class="search-btn-rounded" onclick="onSearch(document.getElementById('search-input').value)">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
@@ -507,8 +571,8 @@
     <div id="view-offers" class="page-view">
         <div class="container">
             <div style="background: linear-gradient(135deg, #d85b28, #f97316); color: white; border-radius: 12px; padding: 14px; margin-bottom: 16px; text-align: center;">
-                <h3 style="font-size: 1.15rem; margin-bottom: 4px;">🎉 أقوى عروض وتخفيضات اليوم</h3>
-                <p style="font-size: 0.85rem; opacity: 0.95;">وفر أكثر مع عروض مزارع وألبان حمزة المنوفي</p>
+                <h3 style="font-size: 1.15rem; margin-bottom: 4px;">🎉 عروض وتخفيضات حمزة المنوفي</h3>
+                <p style="font-size: 0.85rem; opacity: 0.95;">وفر أكثر مع أقوى الأسعار اليومية</p>
             </div>
             <div id="offers-list" class="products-grid"></div>
         </div>
@@ -517,7 +581,7 @@
     <!-- 4. المفضلة -->
     <div id="view-favorites" class="page-view">
         <div class="container">
-            <h2 style="margin-bottom: 14px; font-size: 1.2rem;">🤍 قائمتي المفضلة</h2>
+            <h2 style="margin-bottom: 14px; font-size: 1.2rem;">🧡 المنتجات المفضلة</h2>
             <div id="favorites-list" class="products-grid"></div>
         </div>
     </div>
@@ -636,207 +700,259 @@
     </div>
 
     <script>
-        const API_BASE = window.location.origin;
-        let allProducts = [];
-        let favorites = JSON.parse(localStorage.getItem('fav_products') || '[]');
-        let cart = [];
-        const deliveryFee = 20;
+                const API_BASE = window.location.origin;
+                let allProducts = [];
+                let favorites = JSON.parse(localStorage.getItem('fav_products') || '[]');
+                let cart = [];
+                const deliveryFee = 20;
 
-        window.onload = () => {
-            loadProducts();
-            // إخفاء الـ Splash Screen بعد ثانيتين بسلاسة
-            setTimeout(() => {
-                const splash = document.getElementById('splash-screen');
-                if (splash) {
-                    splash.style.opacity = '0';
-                    setTimeout(() => splash.style.display = 'none', 600);
+                window.onload = () => {
+                    loadProducts();
+                    setTimeout(() => {
+                        const splash = document.getElementById('splash-screen');
+                        if (splash) {
+                            splash.style.opacity = '0';
+                            setTimeout(() => splash.style.display = 'none', 600);
+                        }
+                    }, 1800);
+                };
+
+                async function loadProducts() {
+                    try {
+                        const res = await fetch(`${API_BASE}/api/Market/products`);
+                        allProducts = await res.json();
+                        renderAllViews();
+                    } catch (err) {
+                        document.getElementById('products-list').innerHTML = `
+                            <div style="grid-column: span 2; text-align: center; color: #ef4444; padding: 20px;">تعذر الاتصال بالسيرفر.</div>`;
+                    }
                 }
-            }, 2000);
-        };
 
-        async function loadProducts() {
-            try {
-                const res = await fetch(`${API_BASE}/api/Market/products`);
-                allProducts = await res.json();
-                renderProducts(allProducts, 'products-list');
-            } catch (err) {
-                document.getElementById('products-list').innerHTML = `
-                    <div style="grid-column: span 2; text-align: center; color: var(--danger); padding: 20px;">تعذر الاتصال بالسيرفر.</div>`;
-            }
-        }
+                function renderAllViews() {
+                    renderProducts(allProducts, 'products-list');
+                    renderOffers();
+                    renderFavorites();
+                }
 
-        function renderProducts(items, targetElementId, isOffer = false) {
-            const list = document.getElementById(targetElementId);
-            if (!items || items.length === 0) {
-                list.innerHTML = `<div style="grid-column: span 2; text-align: center; padding: 20px; color: var(--text-muted);">لا توجد عناصر لعرضها</div>`;
-                return;
-            }
-            list.innerHTML = items.map(p => {
-                const isFav = favorites.includes(p.id);
-                const hasDiscount = isOffer || (p.id % 2 === 1);
-                const discountPercent = hasDiscount ? 15 : 0;
-                const oldPrice = hasDiscount ? (p.price * 1.2).toFixed(2) : null;
+                function renderProducts(items, targetElementId, isOffer = false) {
+                    const list = document.getElementById(targetElementId);
+                    if (!list) return;
+                    if (!items || items.length === 0) {
+                        list.innerHTML = `<div style="grid-column: span 2; text-align: center; padding: 20px; color: var(--text-muted);">لا توجد عناصر لعرضها</div>`;
+                        return;
+                    }
+                    list.innerHTML = items.map(p => {
+                        const isFav = favorites.includes(p.id);
+                        const hasDiscount = isOffer || (p.id % 2 === 1);
+                        const discountPercent = hasDiscount ? (p.id % 3 === 0 ? 14 : 10) : 0;
+                        const oldPrice = hasDiscount ? (p.price * 1.15).toFixed(2) : null;
+                        const cartItem = cart.find(i => i.product.id === p.id);
+                        const qty = cartItem ? cartItem.quantity : 0;
 
-                return `
-                <div class="product-card">
-                    <button class="fav-btn" onclick="toggleFav(${p.id})">${isFav ? '❤️' : '🤍'}</button>
-                    ${hasDiscount ? `<div class="discount-tag">خصم ${discountPercent}%</div>` : ''}
-                    <img src="${p.imageUrl || 'https://via.placeholder.com/150'}" alt="${p.name}" class="product-img">
-                    <div class="product-info">
-                        <div class="product-name">${p.name}</div>
-                        <div class="price-container">
-                            <span class="product-price">${p.price.toFixed(2)} ج.م</span>
-                            ${oldPrice ? `<span class="old-price">${oldPrice} ج.م</span>` : ''}
-                        </div>
-                        <button class="add-btn" onclick="addToCart(${p.id})">أضف للسلة 🛒</button>
-                    </div>
-                </div>`;
-            }).join('');
-        }
+                        return `
+                        <div class="product-card">
+                            <!-- زر المفضلة البرتقالي الجديد -->
+                            <button class="fav-heart-btn" onclick="toggleFav(${p.id})">
+                                <svg width="24" height="24" viewBox="0 0 24 24"
+                                     fill="${isFav ? 'var(--primary-orange)' : 'none'}"
+                                     stroke="${isFav ? 'var(--primary-orange)' : '#8cb657'}"
+                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                </svg>
+                            </button>
 
-        function toggleFav(id) {
-            if (favorites.includes(id)) {
-                favorites = favorites.filter(item => item !== id);
-            } else {
-                favorites.push(id);
-            }
-            localStorage.setItem('fav_products', JSON.stringify(favorites));
-            renderProducts(allProducts, 'products-list');
-            renderFavorites();
-        }
+                            ${hasDiscount ? `<div class="discount-tag">-${discountPercent}%</div>` : ''}
 
-        function renderFavorites() {
-            const favItems = allProducts.filter(p => favorites.includes(p.id));
-            renderProducts(favItems, 'favorites-list');
-        }
+                            <img src="${p.imageUrl || 'https://via.placeholder.com/150'}" alt="${p.name}" class="product-img">
 
-        function renderOffers() {
-            const offerItems = allProducts.filter((p, index) => index % 2 === 0);
-            renderProducts(offerItems, 'offers-list', true);
-        }
+                            <!-- زر + والتحكم الذكي بالكمية تحت الصورة مباشرة -->
+                            <div class="cart-action-row">
+                                ${qty === 0 ? `
+                                    <button class="single-add-btn" onclick="addToCart(${p.id})">+</button>
+                                ` : `
+                                    <div class="stepper-capsule">
+                                        <button class="stepper-btn minus" onclick="changeQty(${p.id}, -1)">–</button>
+                                        <span class="stepper-count">${qty}</span>
+                                        <button class="stepper-btn" onclick="changeQty(${p.id}, 1)">+</button>
+                                    </div>
+                                `}
+                            </div>
 
-        function filterByCategory(cat) {
-            switchNav('home');
-            if (cat === 'الكل') {
-                renderProducts(allProducts, 'products-list');
-            } else {
-                renderProducts(allProducts.filter(p => p.name.includes(cat) || (p.category && p.category.includes(cat))), 'products-list');
-            }
-        }
+                            <!-- تفاصيل السعر والاسم -->
+                            <div class="product-info">
+                                <div class="price-container">
+                                    <span class="product-price">${p.price.toFixed(2)}</span>
+                                    ${oldPrice ? `<span class="old-price">${oldPrice}</span>` : ''}
+                                </div>
+                                <div class="product-name">${p.name}</div>
+                            </div>
+                        </div>`;
+                    }).join('');
+                }
 
-        function onSearch(query) {
-            const q = query.trim().toLowerCase();
-            switchNav('home');
-            if (!q) {
-                renderProducts(allProducts, 'products-list');
-                return;
-            }
-            const results = allProducts.filter(p => p.name.toLowerCase().includes(q));
-            renderProducts(results, 'products-list');
-        }
+                function toggleFav(id) {
+                    if (favorites.includes(id)) {
+                        favorites = favorites.filter(item => item !== id);
+                    } else {
+                        favorites.push(id);
+                    }
+                    localStorage.setItem('fav_products', JSON.stringify(favorites));
+                    renderAllViews();
+                }
 
-        function switchNav(page) {
-            document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active'));
-            document.querySelectorAll('.nav-item-btn').forEach(b => b.classList.remove('active'));
+                function renderFavorites() {
+                    const favItems = allProducts.filter(p => favorites.includes(p.id));
+                    renderProducts(favItems, 'favorites-list');
+                }
 
-            const targetPage = document.getElementById(`view-${page}`);
-            if (targetPage) targetPage.classList.add('active');
+                function renderOffers() {
+                    const offerItems = allProducts.filter((p, index) => index % 2 === 0);
+                    renderProducts(offerItems, 'offers-list', true);
+                }
 
-            const targetBtn = document.getElementById(`btn-${page}`);
-            if (targetBtn) targetBtn.classList.add('active');
+                function filterByCategory(cat) {
+                    switchNav('home');
+                    if (cat === 'الكل') {
+                        renderProducts(allProducts, 'products-list');
+                    } else {
+                        renderProducts(allProducts.filter(p => p.name.includes(cat) || (p.category && p.category.includes(cat))), 'products-list');
+                    }
+                }
 
-            if (page === 'offers') renderOffers();
-            if (page === 'favorites') renderFavorites();
-            if (page === 'cart') updateCart();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+                function onSearch(query) {
+                    const q = query.trim().toLowerCase();
+                    switchNav('home');
+                    if (!q) {
+                        renderProducts(allProducts, 'products-list');
+                        return;
+                    }
+                    const results = allProducts.filter(p => p.name.toLowerCase().includes(q));
+                    renderProducts(results, 'products-list');
+                }
 
-        function addToCart(id) {
-            const product = allProducts.find(p => p.id === id);
-            if (!product) return;
-            const existing = cart.find(i => i.product.id === id);
-            if (existing) {
-                existing.quantity++;
-            } else {
-                cart.push({ product, quantity: 1 });
-            }
-            updateCart();
-            alert(`تمت إضافة "${product.name}" إلى السلة بنجاح`);
-        }
+                function switchNav(page) {
+                    document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active'));
+                    document.querySelectorAll('.nav-item-btn').forEach(b => b.classList.remove('active'));
 
-        function updateCart() {
-            const count = cart.reduce((s, i) => s + i.quantity, 0);
-            document.getElementById('cart-badge-count').innerText = count;
-            const container = document.getElementById('cart-items');
-            if (cart.length === 0) {
-                container.innerHTML = '<p style="text-align: center; color: var(--text-muted);">السلة فارغة حالياً</p>';
-                document.getElementById('subtotal-val').innerText = '0.0 ج.م';
-                document.getElementById('total-val').innerText = '0.0 ج.م';
-                return;
-            }
-            let subtotal = 0;
-            container.innerHTML = cart.map(i => {
-                subtotal += i.product.price * i.quantity;
-                return `
-                <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border-color);">
-                    <span>${i.product.name} (x${i.quantity})</span>
-                    <span>${(i.product.price * i.quantity).toFixed(2)} ج.م</span>
-                </div>`;
-            }).join('');
-            document.getElementById('subtotal-val').innerText = `${subtotal.toFixed(2)} ج.م`;
-            document.getElementById('total-val').innerText = `${(subtotal + deliveryFee).toFixed(2)} ج.م`;
-        }
+                    const targetPage = document.getElementById(`view-${page}`);
+                    if (targetPage) targetPage.classList.add('active');
 
-        async function submitOrder() {
-            if (cart.length === 0) return alert('السلة فارغة!');
-            const name = document.getElementById('cust-name').value.trim();
-            const phone = document.getElementById('cust-phone').value.trim();
-            const address = document.getElementById('cust-address').value.trim();
-            if (!name || !phone || !address) return alert('يرجى ملء كافة البيانات');
+                    const targetBtn = document.getElementById(`btn-${page}`);
+                    if (targetBtn) targetBtn.classList.add('active');
 
-            const payload = {
-                customerName: name,
-                phoneNumber: phone,
-                address: address,
-                productName: cart.map(i => `${i.product.name} (${i.quantity})`).join(', '),
-                totalPrice: cart.reduce((s, i) => s + (i.product.price * i.quantity), 0) + deliveryFee,
-                status: "تم الاستلام"
-            };
+                    if (page === 'offers') renderOffers();
+                    if (page === 'favorites') renderFavorites();
+                    if (page === 'cart') updateCart();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
 
-            const res = await fetch(`${API_BASE}/api/Market/order`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
+                function addToCart(id) {
+                    const product = allProducts.find(p => p.id === id);
+                    if (!product) return;
+                    const existing = cart.find(i => i.product.id === id);
+                    if (existing) {
+                        existing.quantity++;
+                    } else {
+                        cart.push({ product, quantity: 1 });
+                    }
+                    updateCart();
+                    renderAllViews();
+                }
 
-            if (res.ok) {
-                cart = [];
-                updateCart();
-                alert('تم تسجيل طلبك بنجاح!');
-                switchNav('home');
-            }
-        }
+                function changeQty(id, delta) {
+                    const item = cart.find(i => i.product.id === id);
+                    if (!item) return;
+                    item.quantity += delta;
+                    if (item.quantity <= 0) {
+                        cart = cart.filter(i => i.product.id !== id);
+                    }
+                    updateCart();
+                    renderAllViews();
+                }
 
-        function openSupport() {
-            window.open('https://wa.me/201000000000?text=' + encodeURIComponent('السلام عليكم، أود الاستفسار من خدمة عملاء ماركت حمزة المنوفي'), '_blank');
-        }
+                function updateCart() {
+                    const count = cart.reduce((s, i) => s + i.quantity, 0);
+                    document.getElementById('cart-badge-count').innerText = count;
+                    const container = document.getElementById('cart-items');
+                    if (!container) return;
 
-        function openAccountModal() {
-            alert('شاشة إنشاء الحساب ستكون مفعلة في التحديث القادم');
-        }
+                    if (cart.length === 0) {
+                        container.innerHTML = '<p style="text-align: center; color: var(--text-muted);">السلة فارغة حالياً</p>';
+                        document.getElementById('subtotal-val').innerText = '0.0 ج.م';
+                        document.getElementById('total-val').innerText = '0.0 ج.م';
+                        return;
+                    }
+                    let subtotal = 0;
+                    container.innerHTML = cart.map(i => {
+                        subtotal += i.product.price * i.quantity;
+                        return `
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border-color);">
+                            <div>
+                                <div style="font-weight: bold;">${i.product.name}</div>
+                                <div style="color: var(--text-muted); font-size: 0.85rem;">${i.product.price.toFixed(2)} ج.م</div>
+                            </div>
+                            <div class="stepper-capsule">
+                                <button class="stepper-btn minus" onclick="changeQty(${i.product.id}, -1)">–</button>
+                                <span class="stepper-count">${i.quantity}</span>
+                                <button class="stepper-btn" onclick="changeQty(${i.product.id}, 1)">+</button>
+                            </div>
+                        </div>`;
+                    }).join('');
+                    document.getElementById('subtotal-val').innerText = `${subtotal.toFixed(2)} ج.م`;
+                    document.getElementById('total-val').innerText = `${(subtotal + deliveryFee).toFixed(2)} ج.م`;
+                }
 
-        function changeLanguage() {
-            alert('اللغة الحالية هي: العربية');
-        }
+                async function submitOrder() {
+                    if (cart.length === 0) return alert('السلة فارغة!');
+                    const name = document.getElementById('cust-name').value.trim();
+                    const phone = document.getElementById('cust-phone').value.trim();
+                    const address = document.getElementById('cust-address').value.trim();
+                    if (!name || !phone || !address) return alert('يرجى ملء كافة البيانات');
 
-        function openAdminPrompt() {
-            const pass = prompt('أدخل الرمز السري للإدارة:');
-            if (pass === '1234') {
-                alert('مرحباً بك في لوحة تحكم إدارة ماركت حمزة المنوفي');
-            } else if (pass !== null) {
-                alert('الرمز السري غير صحيح');
-            }
-        }
+                    const payload = {
+                        customerName: name,
+                        phoneNumber: phone,
+                        address: address,
+                        productName: cart.map(i => `${i.product.name} (${i.quantity})`).join(', '),
+                        totalPrice: cart.reduce((s, i) => s + (i.product.price * i.quantity), 0) + deliveryFee,
+                        status: "تم الاستلام"
+                    };
+
+                    const res = await fetch(`${API_BASE}/api/Market/order`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (res.ok) {
+                        cart = [];
+                        updateCart();
+                        renderAllViews();
+                        alert('تم تسجيل طلبك بنجاح!');
+                        switchNav('home');
+                    }
+                }
+
+                function openSupport() {
+                    window.open('https://wa.me/201000000000?text=' + encodeURIComponent('السلام عليكم، أود الاستفسار من خدمة عملاء ماركت حمزة المنوفي'), '_blank');
+                }
+
+                function openAccountModal() {
+                    alert('شاشة إنشاء الحساب ستكون مفعلة في التحديث القادم');
+                }
+
+                function changeLanguage() {
+                    alert('اللغة الحالية هي: العربية');
+                }
+
+                function openAdminPrompt() {
+                    const pass = prompt('أدخل الرمز السري للإدارة:');
+                    if (pass === '1234') {
+                        alert('مرحباً بك في لوحة تحكم إدارة ماركت حمزة المنوفي');
+                    } else if (pass !== null) {
+                        alert('الرمز السري غير صحيح');
+                    }
+                }
     </script>
 </body>
 </html>
